@@ -2,7 +2,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 
 const experiencesRoute = require('./routes/experiences.routes.js');
 const bookingsRoute = require('./routes/bookings.routes.js');
@@ -12,8 +11,8 @@ const app = express();
 
 // ✅ Allowed frontend URLs (local + live)
 const allowedOrigins = [
-  'http://localhost:5173', // local frontend (vite)
-  'https://stunning-clafoutis-0e7c7b.netlify.app' // live frontend (Netlify)
+  'http://localhost:5173', // Local (Vite)
+  'https://stunning-clafoutis-0e7c7b.netlify.app' // Live (Netlify)
 ];
 
 // ✅ CORS setup
@@ -22,8 +21,8 @@ app.use(
     origin: function (origin, callback) {
       // Allow requests with no origin (like Postman)
       if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
-        const msg = `The CORS policy for this site does not allow access from the origin ${origin}`;
+      if (!allowedOrigins.includes(origin)) {
+        const msg = `CORS policy does not allow access from ${origin}`;
         return callback(new Error(msg), false);
       }
       return callback(null, true);
@@ -33,7 +32,8 @@ app.use(
   })
 );
 
-app.use(bodyParser.json());
+// ✅ Middleware
+app.use(express.json()); // instead of bodyParser.json()
 
 // ✅ Routes
 app.use('/api/experiences', experiencesRoute);
@@ -43,7 +43,6 @@ app.use('/api/promo', promoRoute);
 // ✅ MongoDB connection + server start
 const PORT = process.env.PORT || 5000;
 const MONGO = process.env.MONGO_URI;
-
 
 mongoose
   .connect(MONGO)
