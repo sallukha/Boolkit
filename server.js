@@ -2,6 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 const experiencesRoute = require('./routes/experiences.routes.js');
 const bookingsRoute = require('./routes/bookings.routes.js');
@@ -9,12 +10,11 @@ const promoRoute = require('./routes/promo.routes.js');
 
 const app = express();
 
-// ✅ Allowed frontend URLs (local + live)
+// ✅ Allowed frontend URLs (local + Netlify live)
 const allowedOrigins = [
-  'http://localhost:5173', // for local development
-  'https://astonishing-dragon-95e916.netlify.app' // ✅ your new live frontend
+  'http://localhost:5173',
+  'https://astonishing-dragon-95e916.netlify.app' // ✅ your latest frontend link
 ];
-
 
 // ✅ CORS setup
 app.use(
@@ -22,8 +22,8 @@ app.use(
     origin: function (origin, callback) {
       // Allow requests with no origin (like Postman)
       if (!origin) return callback(null, true);
-      if (!allowedOrigins.includes(origin)) {
-        const msg = `CORS policy does not allow access from ${origin}`;
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = `CORS policy does not allow access from origin ${origin}`;
         return callback(new Error(msg), false);
       }
       return callback(null, true);
@@ -33,24 +33,19 @@ app.use(
   })
 );
 
-// ✅ Middleware
-app.use(express.json()); // instead of bodyParser.json()
+app.use(bodyParser.json());
 
 // ✅ Routes
 app.use('/api/experiences', experiencesRoute);
 app.use('/api/bookings', bookingsRoute);
 app.use('/api/promo', promoRoute);
 
-// ✅ MongoDB connection + server start
-const PORT = process.env.PORT || 5000;
+// ✅ MongoDB connection
 const MONGO = process.env.MONGO_URI;
-
 mongoose
   .connect(MONGO)
-  .then(() => {
-    console.log('✅ MongoDB connected');
-    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-  })
-  .catch(err => {
-    console.error('❌ MongoDB connection error:', err);
-  });
+  .then(() => console.log('✅ MongoDB connected'))
+  .catch(err => console.error('❌ MongoDB connection error:', err));
+
+// ✅ Export for Vercel (no app.listen here)
+module.exports = app;

@@ -1,24 +1,23 @@
-{
-  "name": "backend-5",
+ {
+  "name": "boolkit-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "description": "Backend for Boolkit project",
+  "main": "index.js",
+  "type": "commonjs",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "seed": "node seed.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
-  "author": "md harish",
-  "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^14.0.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.1",
-    "nodemon": "^3.1.9",
-    "seed": "^0.4.4"
-  }
+    "nodemon": "^3.1.9"
+  },
+  "author": "Lareb Khan",
+  "license": "ISC"
 }
