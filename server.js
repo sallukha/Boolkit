@@ -11,9 +11,10 @@ const app = express();
 
 // ✅ Allowed frontend URLs (local + live)
 const allowedOrigins = [
-  'http://localhost:5173', // Local (Vite)
-  'https://stunning-clafoutis-0e7c7b.netlify.app' // Live (Netlify)
+  'http://localhost:5173', // for local development
+  'https://astonishing-dragon-95e916.netlify.app' // ✅ your new live frontend
 ];
+
 
 // ✅ CORS setup
 app.use(
